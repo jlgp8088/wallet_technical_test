@@ -1,0 +1,9 @@
+*/migrations/*00*
+*/migrations/__pycache__/
+**/__pycache__/*
+
+media/images/*.png
+media/images/*.jpeg
+media/attach/*.pdf
+media/tmp/*.pdf
+statics/*
