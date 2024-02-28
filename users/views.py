@@ -1,11 +1,15 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User as DjangoUser
-from .models import Users
+from users.models import Users, Wallets
 from rest_framework import status
 from .serializers import AdminUserSerializer, UserResponseSerializer
 from django.db import IntegrityError
 from auth.decorators import attach_user_to_request
+from api.exchange import create_wallet
+from django.db import transaction
+
+
 @api_view(['POST'])
 def create_user(request):
     serializer = AdminUserSerializer(data=request.data)
@@ -14,9 +18,13 @@ def create_user(request):
       email = serializer.data['email']
       password = serializer.data['password']
       try:
-          admin_user = DjangoUser.objects.create_superuser(username=email, email=email, password=password)
-          user = Users(name=name, email=email, user_login= admin_user)
-          user.save()
+          with transaction.atomic():
+            admin_user = DjangoUser.objects.create_superuser(username=email, email=email, password=password)
+            user = Users(name=name, email=email, user_login= admin_user)
+            address = create_wallet()
+            user.save()
+            wallet = Wallets.objects.create(address=address, user=user)
+            wallet.save()
           return Response({}, status=status.HTTP_201_CREATED)
       except IntegrityError:
           return Response({'error': 'email creado anteriormente'}, status=status.HTTP_400_BAD_REQUEST)
