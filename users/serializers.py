@@ -21,7 +21,7 @@ class AdminUserSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=150, required=True)
     password = serializers.CharField(max_length=10, validators=[PasswordValidator()])
 
-class UserSerializer(serializers.ModelSerializer):
+class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = ['name','email'] 
