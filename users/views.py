@@ -3,16 +3,16 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User as DjangoUser
 from .models import Users
 from rest_framework import status
-from .serializers import AdminUserSerializer, UserSerializer
+from .serializers import AdminUserSerializer, UserResponseSerializer
 from django.db import IntegrityError
 from auth.decorators import attach_user_to_request
 @api_view(['POST'])
 def create_user(request):
     serializer = AdminUserSerializer(data=request.data)
     if serializer.is_valid():
-      name = request.data.get('name')
-      email = request.data.get('email')
-      password = request.data.get('password')
+      name = serializer.data['name']
+      email = serializer.data['email']
+      password = serializer.data['password']
       try:
           admin_user = DjangoUser.objects.create_superuser(username=email, email=email, password=password)
           user = Users(name=name, email=email, user_login= admin_user)
@@ -30,5 +30,5 @@ def create_user(request):
 @attach_user_to_request
 def get_info_user(request):
     currentUser= request.current_user
-    serializer = UserSerializer(currentUser)  
+    serializer = UserResponseSerializer(currentUser)  
     return Response(serializer.data)
