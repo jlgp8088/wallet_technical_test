@@ -8,3 +8,4 @@ media/attach/*.pdf
 media/tmp/*.pdf
 statics/*
 db.sqlite3
+venv
