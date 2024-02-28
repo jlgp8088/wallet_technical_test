@@ -24,10 +24,5 @@ class BlockchainPayment(models.Model):
     fee_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     processed = models.BooleanField(default=False)
 
-class UserFeeConfiguration(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    mode = models.CharField(max_length=1, choices=choices_mode)
-    payment_fee_percentage = models.DecimalField(max_digits=5, decimal_places=2)
-    trade_fee_percentage = models.DecimalField(max_digits=5, decimal_places=2)
 
 

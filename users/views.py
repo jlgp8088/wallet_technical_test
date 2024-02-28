@@ -19,7 +19,7 @@ def create_user(request):
       password = serializer.data['password']
       try:
           with transaction.atomic():
-            admin_user = DjangoUser.objects.create_superuser(username=email, email=email, password=password)
+            admin_user = DjangoUser.objects.create_user(username=email, email=email, password=password)
             user = Users(name=name, email=email, user_login= admin_user)
             address = create_wallet()
             user.save()

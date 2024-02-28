@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from users.serializers import AdminUserSerializer
-from .models import choices_mode
 
 class FiatPaymentSerializar(serializers.Serializer):
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
@@ -21,9 +20,5 @@ class BlockchainPaymentSerializar(serializers.Serializer):
     fee_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
     processed = serializers.BooleanField()
 
-class UserFeeConfigurationSerializar(serializers.Serializer):
-    user = AdminUserSerializer(many=False)
-    mode = serializers.ChoiceField(choices=choices_mode)
-    payment_fee_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
-    trade_fee_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+
 
