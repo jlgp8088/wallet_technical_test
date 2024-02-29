@@ -1,5 +1,5 @@
 import hashlib
-from api.serializers import trxCryptoSerializar
+from api.serializers import hashSerializar, walletBalanceSerializar
 import random
 import string
 
@@ -8,7 +8,7 @@ def transfer_between_wallet(wallet_origin, wallet_destiny):
     datos_transaccion = f"{wallet_origin}-{wallet_destiny}"
     hash_falso = hashlib.sha256(datos_transaccion.encode()).hexdigest()
     data={'hash': hash_falso}
-    hashSerializer = trxCryptoSerializar(data=data)
+    hashSerializer = hashSerializar(data=data)
     if(hashSerializer.is_valid()):
       return hashSerializer.data
   except Exception as e:
@@ -30,3 +30,14 @@ def create_wallet():
   hash_aleatorio = '0x' + ''.join(random.choices(caracteres_hex, k=longitud - 2))
   
   return hash_aleatorio
+
+def get_balance(address):
+  data = {
+    'balance': 10000
+  }
+  balanceSerializer = walletBalanceSerializar(data=data)
+
+  if(balanceSerializer.is_valid()):
+    return balanceSerializer.data
+  else:
+    raise ValueError('error transfer_between_wallet:'+str(balanceSerializer.errors)) 

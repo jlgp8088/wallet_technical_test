@@ -6,5 +6,9 @@ class FiatUsdtSerializar(serializers.Serializer):
     fiat_code = serializers.CharField(max_length=3, required=True)
 
 
-class trxCryptoSerializar(serializers.Serializer):
+class hashSerializar(serializers.Serializer):
     hash = serializers.CharField(min_length=10, max_length=70, required=True)
+
+
+class walletBalanceSerializar(serializers.Serializer):
+    balance = serializers.DecimalField(max_digits=10, decimal_places=2, required=True)
