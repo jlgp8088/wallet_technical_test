@@ -1,0 +1,27 @@
+[
+  {
+    "model": "users.UserFeeConfiguration",
+    "pk": 1,
+    "fields": {
+      "mode" : "A",
+      "payment_fee_percentage" : 1,
+      "trade_fee_percentage" : 1,
+      "instant_payment" : 1,
+      "blockchain_fee_percentage" : 1
+    }
+  },
+  {
+    "model": "users.UserFeeConfiguration",
+    "pk": 2,
+    "fields": {
+      "mode" : "B",
+      "payment_fee_percentage" : 1,
+      "trade_fee_percentage" : 1,
+      "instant_payment" : 0,
+      "blockchain_fee_percentage" : 1
+    }
+  }
+]
+
+  
+  

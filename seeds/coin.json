@@ -1,0 +1,33 @@
+[
+  {
+    "model": "coins.FiatCoin",
+    "pk": 1,
+    "fields": {
+      "code" : "EUR",
+      "name" : "Euro",
+      "country_id" : 1
+    }
+  },
+  {
+    "model": "coins.FiatCoin",
+    "pk": 2,
+    "fields": {
+      "code" : "USD",
+      "name" : "Dolar Americado",
+      "country_id" : 2
+    }
+  },
+  {
+    "model": "coins.CryptoCoin",
+    "pk": 1,
+    "fields": {
+      "code" : "BTC",
+      "name" : "bitcoin"
+    }
+  }
+]
+  
+  
+
+  
+  

@@ -1,0 +1,22 @@
+[
+  {
+    "model": "coins.Country",
+    "pk": 1,
+    "fields": {
+      "code" : "EU",
+      "name" : "Union Europea"
+    }
+  },
+  {
+    "model": "coins.Country",
+    "pk": 2,
+    "fields": {
+      "code" : "US",
+      "name" : "United State"
+    }
+  }
+]
+  
+
+  
+  
