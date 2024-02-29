@@ -1,12 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from transactions.serializers import FiatPaymentSerializar, BlockchainPaymentSerializar
+from transactions.serializers import FiatPaymentSerializar, BlockchainPaymentSerializar, FeeReportSerializar
 from auth.decorators import attach_user_to_request
 from transactions.domain.payments import create_fiat_payment_process, confirm_fiat_payment_process, create_blockchain_payment_process
 from api.serializers import hashSerializar
 from coins.models import CryptoCoin
-
+from transactions.models import FeesHistory
+from django.db.models import Case, Value, When, Sum
 # Create your views here.
 
 @api_view(['POST'])
@@ -60,3 +61,29 @@ def create_blockchain_payment(request):
           return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
   else:
     return Response(dataBlockChain.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@attach_user_to_request
+def report_fees(request):  
+    currentUser = request.current_user
+    serializerParams = FeeReportSerializar(data=request.GET)
+    if(serializerParams.is_valid()):
+        params = serializerParams.data
+        report_fee = FeesHistory.objects.values(state=Case(
+           When(paid=True,then=Value('pay')),
+           When(paid=False,then=Value('pending'))
+        )).annotate(
+            total_payment_fee=Sum('payment_fee'),
+            total_trade_fee=Sum('trade_fee'),
+            total_blockchain_fee=Sum('blockchain_fee')
+        ).filter(
+           user=currentUser,
+           created_at__year = params['year'],
+           created_at__month = params['month']
+        )
+        
+        return Response(report_fee, status=status.HTTP_200_OK)
+    else:
+        return Response(serializerParams.errors, status=status.HTTP_400_BAD_REQUEST)
+

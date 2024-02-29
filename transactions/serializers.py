@@ -44,3 +44,8 @@ class FiatPaymentResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = FiatPayment
         fields = ['amount_fiat','fiat_code', 'processed_date']
+
+
+class FeeReportSerializar(serializers.Serializer):
+    year = serializers.IntegerField(min_value=1000, max_value=9999)
+    month = serializers.IntegerField(min_value=1, max_value=12)
