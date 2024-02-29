@@ -26,7 +26,7 @@ class AdminUserSerializer(serializers.Serializer):
         try:
             UserFeeConfiguration.objects.get(mode=value)
         except UserFeeConfiguration.DoesNotExist:
-            raise serializers.ValidationError("El fee_mode especificado no existe")
+            raise serializers.ValidationError("invalid fee_mode")
         
         return value
 
