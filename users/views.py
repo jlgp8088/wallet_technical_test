@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User as DjangoUser
-from users.models import Users, Wallets
+from users.models import Users, Wallets, UserFeeConfiguration
 from rest_framework import status
 from .serializers import AdminUserSerializer, UserResponseSerializer
 from django.db import IntegrityError
@@ -17,15 +17,17 @@ def create_user(request):
       name = serializer.data['name']
       email = serializer.data['email']
       password = serializer.data['password']
+      fee_mode = serializer.data['fee_mode']
       try:
-          with transaction.atomic():
-            admin_user = DjangoUser.objects.create_user(username=email, email=email, password=password)
-            user = Users(name=name, email=email, user_login= admin_user)
-            address = create_wallet()
-            user.save()
-            wallet = Wallets.objects.create(address=address, user=user)
-            wallet.save()
-          return Response({}, status=status.HTTP_201_CREATED)
+        with transaction.atomic():
+          fee = UserFeeConfiguration.objects.get(mode=fee_mode)
+          admin_user = DjangoUser.objects.create_user(username=email, email=email, password=password)
+          user = Users(name=name, email=email, user_login= admin_user, fee_mode=fee)
+          address = create_wallet()
+          user.save()
+          wallet = Wallets.objects.create(address=address, user=user)
+          wallet.save()
+        return Response({}, status=status.HTTP_201_CREATED)
       except IntegrityError:
           return Response({'error': 'email creado anteriormente'}, status=status.HTTP_400_BAD_REQUEST)
       except Exception as e:
