@@ -13,7 +13,7 @@ def convert_to_usdt (amountfiat, codecoin):
 
   amountfiat =Decimal(amountfiat)
   factor =Decimal(factor)
-  amount_usdt = (amountfiat * factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+  amount_usdt = (amountfiat / factor).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
   
   data = {
     'amount_fiat': amountfiat,
