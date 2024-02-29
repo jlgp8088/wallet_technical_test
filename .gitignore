@@ -9,3 +9,4 @@ media/tmp/*.pdf
 statics/*
 db.sqlite3
 venv
+**.env
