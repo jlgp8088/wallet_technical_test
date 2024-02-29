@@ -61,12 +61,11 @@ def create_blockchain_payment_process(amount, user, coin, destiny):
     processed = False,
   )
 
-  newBlockChain.save()
-
   if(float(amount) > float(balance['balance'])  ):
     raise ValueError('insufficient balance') 
   
-  transfer = transfer_between_wallet(wallet_origin=wallet.address,wallet_destiny=destiny,amount= float(amount))
+  amount_fee = calc_fees(newBlockChain, user, amount )
+  transfer = transfer_between_wallet(wallet_origin=wallet.address,wallet_destiny=destiny,amount= float(amount_fee))
   
   if(transfer is None):
     raise ValueError('error transfer_between_wallet') 
@@ -74,6 +73,7 @@ def create_blockchain_payment_process(amount, user, coin, destiny):
   newBlockChain.processed = True
   newBlockChain.hash_trx = transfer['hash']
   newBlockChain.processed_date = datetime.now()
+  newBlockChain.amount_fee = amount_fee
   newBlockChain.save()
 
   return transfer

@@ -32,6 +32,7 @@ class Trade(models.Model):
 
 class BlockchainPayment(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     coin = models.ForeignKey(CryptoCoin, on_delete=models.PROTECT)
     hash_trx = models.CharField(max_length=70, unique=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
