@@ -3,9 +3,7 @@ from api.models import LogTransactions
 import random
 import string
 import secrets
-import environ
-env = environ.Env()
-environ.Env.read_env()
+from wallet.settings import env
 
 def transfer_between_wallet(wallet_origin, wallet_destiny, amount):
   logTrx = LogTransactions.objects.create(
@@ -31,12 +29,12 @@ def transfer_between_wallet(wallet_origin, wallet_destiny, amount):
   
 
 def transfer_to(wallet_origin, amount):
-  wallet_destiny = env('PRINCIPAL_ADDRESS')
+  wallet_destiny = env.str('PRINCIPAL_ADDRESS')
   return transfer_between_wallet (wallet_origin, wallet_destiny, amount)
 
 
 def transfer_from(wallet_destiny, amount):
-  wallet_origin = env('PRINCIPAL_ADDRESS')
+  wallet_origin = env.str('PRINCIPAL_ADDRESS')
   return transfer_between_wallet (wallet_origin, wallet_destiny, amount)
 
 def create_wallet():
