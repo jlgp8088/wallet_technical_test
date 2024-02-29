@@ -1,7 +1,6 @@
 from django.db import models
 from users.models import Users as User
 
-choices_mode = [('A', 'Mode A'), ('B', 'Mode B')]
 class FiatPayment(models.Model):
     amount_fiat = models.DecimalField(max_digits=10, decimal_places=2)
     amount_usdt = models.DecimalField(max_digits=10, decimal_places=2)
@@ -10,7 +9,7 @@ class FiatPayment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     processed = models.BooleanField(default=False)
-    processed_date = models.DateTimeField(auto_now_add=True)
+    processed_date = models.DateTimeField(null=True)
 
 class Trade(models.Model):
     fiat_payment = models.OneToOneField(FiatPayment, on_delete=models.CASCADE)
