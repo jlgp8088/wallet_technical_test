@@ -8,6 +8,7 @@ class UserFeeConfiguration(models.Model):
     mode = models.CharField(max_length=1)
     payment_fee_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     trade_fee_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    blockchain_fee_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=1)
     instant_payment= models.BooleanField()
 
 class Users(models.Model):
