@@ -1,28 +1,40 @@
-import hashlib
 from api.serializers import hashSerializar, walletBalanceSerializar
+from api.models import LogTransactions
 import random
 import string
+import secrets
 
-def transfer_between_wallet(wallet_origin, wallet_destiny):
+def transfer_between_wallet(wallet_origin, wallet_destiny, amount):
+  logTrx = LogTransactions.objects.create(
+    wallet_origin=wallet_origin,
+    wallet_destiny=wallet_destiny,
+    value=amount,
+    state='I'
+  )
   try:
-    datos_transaccion = f"{wallet_origin}-{wallet_destiny}"
-    hash_falso = hashlib.sha256(datos_transaccion.encode()).hexdigest()
-    data={'hash': hash_falso}
+    hash_aleatorio = secrets.token_hex(32)
+    hash_formateado = '0x' + hash_aleatorio
+    data={'hash': hash_formateado}
     hashSerializer = hashSerializar(data=data)
     if(hashSerializer.is_valid()):
+      logTrx.state='S'
+      logTrx.hash_trx=hashSerializer.data['hash']
+      logTrx.save()
       return hashSerializer.data
   except Exception as e:
+    logTrx.state='F'
+    logTrx.save()
     raise ValueError('error transfer_between_wallet:'+str(e)) 
   
 
-def transfer_to(wallet_origin):
+def transfer_to(wallet_origin, amount):
   wallet_destiny = 'wallet principal'
-  return transfer_between_wallet (wallet_origin, wallet_destiny)
+  return transfer_between_wallet (wallet_origin, wallet_destiny, amount)
 
 
-def transfer_from(wallet_destiny):
+def transfer_from(wallet_destiny, amount):
   wallet_origin = 'wallet principal'
-  return transfer_between_wallet (wallet_origin, wallet_destiny)
+  return transfer_between_wallet (wallet_origin, wallet_destiny, amount)
 
 def create_wallet():
   longitud = 40

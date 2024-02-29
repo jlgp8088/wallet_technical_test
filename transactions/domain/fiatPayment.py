@@ -5,15 +5,18 @@ from rest_framework import status
 
 def create_payment_process(amount, user, coin_code):
   convert = convert_fiat_to_usdt(coin_code=coin_code, amount_fiat=amount)
+  wallet = user.wallets
+
+
   if(convert is None):
     raise ValueError('error convert_to_usdt') 
-
-  wallet = user.wallets
+  
   balance = get_balance(wallet.address)
+  
   if(float(convert['amount_usdt']) > float(balance['balance'])  ):
     raise ValueError('insufficient balance') 
   
-  transfer = transfer_to(wallet.address)
+  transfer = transfer_to(wallet.address, float(convert['amount_usdt']))
   if(transfer is None):
     raise ValueError('error transfer_between_wallet') 
 
